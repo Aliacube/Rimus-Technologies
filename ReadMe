@@ -1,0 +1,67 @@
+TO Setup Git Server in your local netowrk and making pc as a server
+=====================================================================
+
+Pre-requisite
+
+A) Setup GIT into you system:
+
+	$ sudo apt-get install git
+	$ git config --global user.name "Your Name"
+	$ git config --global user.email "Your Email ID"
+
+B) Create SSH keys in your client systems.
+	
+	$ ssh-keygen -t rsa -C <eMail-id>
+
+To Set up GIT Server
+=====================
+
+1)	First create a 'git' user into your system where you want to create git server
+	
+	$ sudo adduser git
+
+2) Log in as 'git' and create .ssh directory in home folder
+
+	$ su git
+	$ cd ~
+	$ mkdir .ssh
+
+3) Create authorized_keys in .ssh directory
+	$ touch ~/.ssh/authorized_keys
+
+
+4) Open ~/.ssh/authorized_keys file and add id_rsa.pub file content which is the public key of users
+	
+	this key resides in all users .ssh folder if the have created it with step (B) mentioned above.
+
+	copy the content of each user and paste into the ~/.ssh/authorized_keys file. this will provide access control
+
+	Suppose you added John's public key which may look like as follows.
+
+	ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCB007n/ww+ouN4gSLKssMxXnBOvf9LGt4L
+	ojG6rs6hPB09j9R/T17/x4lhJA0F3FR1rP6kYBRsWj2aThGw6HXLm9/5zytK6Ztg3RPKK+4k
+	Yjh6541NYsnEAZuXz0jTTyAUfrtU3Z5E003C4oxOj6H0rfIF1kKI9MAQLMdpGW1GYEIgS9Ez
+	Sdfd8AcCIicTDWbqLAcU4UpkaX8KyGlLwsNuuGztobF8m72ALC/nLF6JLtPofwFBlgc+myiv
+	O7TCUSBdLQlgMVOFq1I2uPWQOkOWQAHukEOmfjy2jctxSDBQ220ymjaNsHT4kgtZg2AYYgPq
+	dAv8JggJICUvax2T9va5 gsg-keypair
+
+5) Create a git-repo Directory in /opt/ create Git Project 
+	
+	$ mkdir /opt/git-repo
+	$ cd /opt/git-repo/
+	$ mkdir project.git
+
+		project.git is your project repository it can be also like helloworld.git , this will be cloned to the client who will clone it
+
+	$ cd project.git
+	$ git --bare init
+
+6) Now from John's PC whose public key you added above.
+
+	$ git clone git@SERVER-IP-ADDRESS:/opt/git-repo/project.git
+	$ cd project
+	$ vim README
+	$ git commit -am 'README file'
+	$ git push origin master
+
+
